@@ -1,1 +1,2 @@
-# yolp-p1-backend
+# yolp-backend
+Restaurant review app using Spring Boot
