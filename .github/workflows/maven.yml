@@ -19,10 +19,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Spring Boot application
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_URL: ${{ secrets.DB_URL }}
         run: mvn clean install
 
       - name: Create deployment package
-        run: zip -r deploy.zip . -x '*.git*'
+        run: zip -r deploy.zip . -x '*.git*' 'src/main/resources/application.properties'
 
       - name: Upload deployment package
         uses: actions/upload-artifact@v2
@@ -46,6 +50,6 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: my-application
           environment_name: my-environment
-          version_label: 1
+          version_label: version-${{ github.run_number }}
           region: us-east-1
           deployment_package: deploy.zip
